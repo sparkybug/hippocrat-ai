@@ -1,0 +1,10 @@
+{
+  "pr_title": "Add patient medication endpoint",
+  "pr_description": "Adding a new REST endpoint to retrieve patient medication history from the database",
+  "pr_diff": "+app.get('/api/patient/:id/medications', async (req, res) => {\n+  const patientId = req.params.id;\n+  const medications = await db.query('SELECT * FROM medications WHERE patient_id = ' + patientId);\n+  res.json(medications);\n+});",
+  "repo_name": "your-org/your-clinical-repo",
+  "pr_number": "1",
+  "pr_url": "https://github.com/your-org/your-clinical-repo/pull/1",
+  "author": "your-github-username",
+  "github_token": "your-github-pat-token"
+}
