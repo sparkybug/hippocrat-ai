@@ -1,0 +1,39 @@
+name: HippocratAI Clinical Compliance Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  hippocrat-review:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get PR diff
+        id: get_diff
+        run: |
+          git diff origin/${{ github.base_ref }}...HEAD > pr_diff.txt
+          echo "Diff captured successfully"
+
+      - name: Send to HippocratAI
+        run: |
+          DIFF_CONTENT=$(cat pr_diff.txt | head -c 6000)
+          
+          curl -X POST "${{ secrets.HIPPOCRAT_API_URL }}" \
+            -H "Content-Type: application/json" \
+            -H "X-API-Key: ${{ secrets.HIPPOCRAT_API_KEY }}" \
+            -d "{
+              \"pr_title\": \"${{ github.event.pull_request.title }}\",
+              \"pr_description\": \"${{ github.event.pull_request.body }}\",
+              \"pr_diff\": $(echo "$DIFF_CONTENT" | jq -Rs .),
+              \"repo_name\": \"${{ github.repository }}\",
+              \"pr_number\": \"${{ github.event.pull_request.number }}\",
+              \"pr_url\": \"${{ github.event.pull_request.html_url }}\",
+              \"author\": \"${{ github.event.pull_request.user.login }}\",
+              \"github_token\": \"${{ secrets.GITHUB_PAT }}\"
+            }"
