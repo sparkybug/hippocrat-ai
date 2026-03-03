@@ -28,12 +28,15 @@ jobs:
             -H "Content-Type: application/json" \
             -H "X-API-Key: ${{ secrets.HIPPOCRAT_API_KEY }}" \
             -d "{
-              \"pr_title\": \"${{ github.event.pull_request.title }}\",
-              \"pr_description\": \"${{ github.event.pull_request.body }}\",
-              \"pr_diff\": $(echo "$DIFF_CONTENT" | jq -Rs .),
-              \"repo_name\": \"${{ github.repository }}\",
-              \"pr_number\": \"${{ github.event.pull_request.number }}\",
-              \"pr_url\": \"${{ github.event.pull_request.html_url }}\",
-              \"author\": \"${{ github.event.pull_request.user.login }}\",
-              \"github_token\": \"${{ secrets.GH_PAT }}\"
+              \"UserInput\": \"Review this PR\",
+              \"Variables\": {
+                \"pr_title\": \"${{ github.event.pull_request.title }}\",
+                \"pr_description\": \"${{ github.event.pull_request.body }}\",
+                \"pr_diff\": $(echo "$DIFF_CONTENT" | jq -Rs .),
+                \"repo_name\": \"${{ github.repository }}\",
+                \"pr_number\": \"${{ github.event.pull_request.number }}\",
+                \"pr_url\": \"${{ github.event.pull_request.html_url }}\",
+                \"author\": \"${{ github.event.pull_request.user.login }}\",
+                \"github_token\": \"${{ secrets.GH_PAT }}\"
+              }
             }"
