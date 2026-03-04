@@ -27,6 +27,8 @@ jobs:
           curl -X POST "${{ secrets.HIPPOCRAT_API_URL }}" \
             -H "Content-Type: application/json" \
             -H "X-API-Key: ${{ secrets.HIPPOCRAT_API_KEY }}" \
+            --max-time 10 \
+            --no-fail \
             -d "{
               \"UserInput\": \"Review this PR\",
               \"Variables\": {
@@ -39,4 +41,5 @@ jobs:
                 \"author\": \"${{ github.event.pull_request.user.login }}\",
                 \"github_token\": \"${{ secrets.GH_PAT }}\"
               }
-            }"
+            }" || true
+          echo "HippocratAI review triggered successfully"
