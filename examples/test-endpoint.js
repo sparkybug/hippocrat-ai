@@ -9,4 +9,3 @@ app.get('/api/patient/:id/records', async (req, res) => {
 
 // Updated endpoint  
 
-
