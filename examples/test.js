@@ -23,3 +23,4 @@ app.get('/export/all-patients', (req, res) => {
     res.download(results);
   });
 });
+
